@@ -1686,7 +1686,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 0}
   m_FillRect: {fileID: 1644308664}
   m_HandleRect: {fileID: 0}
@@ -2248,6 +2248,7 @@ RectTransform:
   m_Children:
   - {fileID: 242161711}
   - {fileID: 2067551146}
+  - {fileID: 1456058487}
   - {fileID: 32239010}
   - {fileID: 483101983}
   m_Father: {fileID: 22122063}
@@ -3311,6 +3312,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1456058487}
+  - component: {fileID: 1456058493}
+  - component: {fileID: 1456058492}
   - component: {fileID: 1456058489}
   - component: {fileID: 1456058490}
   - component: {fileID: 1456058491}
@@ -3334,12 +3337,12 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 890599700}
-  m_Father: {fileID: 2067551146}
+  m_Father: {fileID: 1143510400}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0.317}
-  m_AnchoredPosition: {x: -98.33893, y: -398.56647}
-  m_SizeDelta: {x: 526.7213, y: 347.29733}
+  m_AnchoredPosition: {x: -0.22998047, y: 0.4984131}
+  m_SizeDelta: {x: 0.460083, y: 0.9968567}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1456058489
 CanvasRenderer:
@@ -3400,8 +3403,8 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.5018867, g: 0.5018867, b: 0.5018867, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_SelectedColor: {r: 1, g: 1, b: 0, a: 1}
+    m_DisabledColor: {r: 1, g: 1, b: 1, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -3420,6 +3423,33 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1456058492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1456058486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bf978f4c4b712d4cb0f658a4b1f7886, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _PlayerAttak: {fileID: 1456058493}
+--- !u!114 &1456058493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1456058486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3ebcbf97ed72204186c777ef505f2e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _button: {fileID: 1456058491}
+  _img: {fileID: 1456058490}
 --- !u!1 &1456983228
 GameObject:
   m_ObjectHideFlags: 0
@@ -3650,7 +3680,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 0}
   m_FillRect: {fileID: 1186357779}
   m_HandleRect: {fileID: 0}
@@ -5230,12 +5260,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1526910424}
-  - {fileID: 1456058487}
   m_Father: {fileID: 1143510400}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 98.10896, y: 26}
+  m_AnchoredPosition: {x: 98.10896, y: 25.999939}
   m_SizeDelta: {x: 553.2787, y: 827.5696}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2067551147

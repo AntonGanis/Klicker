@@ -1,14 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] PlayerAttak _PlayerAttak;
+    [SerializeField] ClickButton _PlayerAttak;
+    [SerializeField] EnemyManager _enemyManager;
+    [SerializeField] HealthBar _healthBar;
     int o;
     void Awake()
     {
         _PlayerAttak.SubscribeOnClick(ShowClick);
+        _enemyManager.Inialize(_healthBar);
     }
 
     void ShowClick()
@@ -16,4 +17,6 @@ public class GameManager : MonoBehaviour
         o++;
         Debug.Log(o);
     }
+
+
 }

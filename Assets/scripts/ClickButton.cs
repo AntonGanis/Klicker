@@ -2,19 +2,22 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class PlayerAttak : MonoBehaviour
+public class ClickButton : MonoBehaviour
 {
-    [SerializeField] Button _button;
-    [SerializeField] RawImage _img;
+    [SerializeField] private Button _button;
+    [SerializeField] private Image _image;
 
-    public void Initialize()
+    public void Initialize(Sprite sprite, ColorBlock colorBlock)
     {
-        //партиклы
+        _image.sprite = sprite;
+        _button.colors = colorBlock;
     }
+
     public void SubscribeOnClick(UnityAction action)
     {
         _button.onClick.AddListener(action);
     }
+
     public void UnsubscribeOnClick(UnityAction action)
     {
         _button.onClick.RemoveListener(action);
