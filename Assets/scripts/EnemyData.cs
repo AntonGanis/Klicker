@@ -2,8 +2,8 @@ using System;
 using UnityEngine;
 
 [Serializable]
-public class EnemyData
+public struct EnemyData
 {
     public float Health;
-    public Sprite sprite;
+    public Sprite Sprite;
 }

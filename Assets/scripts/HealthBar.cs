@@ -3,18 +3,24 @@ using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour
 {
-    [SerializeField] Slider _slider;
+    [SerializeField] private Slider _slider;
 
-
-    public void ShowUnshow(bool off)
+    public void Show()
     {
-        gameObject.SetActive(off);
+        gameObject.SetActive(true);
     }
-    public void SeTMaxValue(float value)
+
+    public void Hide()
     {
-        _slider.minValue = value;
+        gameObject.SetActive(false);
+    }
+
+    public void SetMaxValue(float value)
+    {
+        _slider.maxValue = value;
         _slider.value = value;
     }
+
     public void DecreaseValue(float value)
     {
         _slider.value -= value;

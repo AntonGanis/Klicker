@@ -1,15 +1,17 @@
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.Events;
 
-public class ClickButtonManager : ScriptableObject
+public class ClickButtonManager : MonoBehaviour
 {
-    [SerializeField] ClickButton _clickButton;
-    [SerializeField] ClickButtonConfig _clickButtonConfig;
-    public Event OnClicked _onClicked;
+    [SerializeField] private ClickButton _clickButton;
+    [SerializeField] private ClickButtonConfig _buttonConfig;
 
-    public void Inicialize()
+    public event UnityAction OnClicked;
+
+    public void Initialize()
     {
-        _clickButton.Initialize(_clickButtonConfig);
-
+        _clickButton.Initialize(_buttonConfig.DefaultSprite, _buttonConfig.ButtonColors);
+        _clickButton.SubscribeOnClick(() => OnClicked?.Invoke());
     }
+
 }

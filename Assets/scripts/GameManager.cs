@@ -1,22 +1,17 @@
+using System;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] ClickButton _PlayerAttak;
-    [SerializeField] EnemyManager _enemyManager;
-    [SerializeField] HealthBar _healthBar;
-    int o;
-    void Awake()
+    [SerializeField] private ClickButtonManager _clickButtonManager;
+    [SerializeField] private EnemyManager _enemyManager;
+    [SerializeField] private HealthBar _healthBar;
+
+    private void Awake()
     {
-        _PlayerAttak.SubscribeOnClick(ShowClick);
-        _enemyManager.Inialize(_healthBar);
+        _clickButtonManager.Initialize();
+        _enemyManager.Initialize(_healthBar);
+
+        _clickButtonManager.OnClicked += () => _enemyManager.DamageCurrentEnemy(1f);
     }
-
-    void ShowClick()
-    {
-        o++;
-        Debug.Log(o);
-    }
-
-
 }
