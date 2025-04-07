@@ -1,3 +1,6 @@
+//using Global.Audio;
+using Global.SaveSystem;
+using Global.SaveSystem.SavableObjects;
 using Meta.Locations;
 using SceneManagement;
 using UnityEngine;
@@ -8,17 +11,29 @@ namespace Meta
     {
         [SerializeField] private LocationManager _locationManager;
 
-        private const string SCENE_LOADER_TAG = "SceneLoader";
+        private SaveSystem _saveSystem;
+        //private AudioManager _audioManager;
+        private SceneLoader _sceneLoader;
+
+        private const string COMMON_OBJECT_TAG = "CommonObject";
 
         public override void Run(SceneEnterParams enterParams)
         {
-            _locationManager.Initialize(1, StartLevel);
+            var commonObject = GameObject.FindWithTag(COMMON_OBJECT_TAG).GetComponent<CommonObject>();
+            _saveSystem = commonObject.SaveSystem;
+            //_audioManager = commonObject.AudioManager;
+            _sceneLoader = commonObject.SceneLoader;
+
+            var progress = (Progress)_saveSystem.GetData(SavableObjectType.Progress);
+
+            _locationManager.Initialize(progress, StartLevel);
+
+            //_audioManager.PlayClip(AudioNames.BackgroundMetaMusic);
         }
 
-        private void StartLevel(Vector2Int locationLevel)
+        private void StartLevel(int location, int level)
         {
-            var sceneLoader = GameObject.FindWithTag(SCENE_LOADER_TAG).GetComponent<SceneLoader>();
-            sceneLoader.LoadGameplayScene();
+            _sceneLoader.LoadGameplayScene(new GameEnterParams(location, level));
         }
     }
 }

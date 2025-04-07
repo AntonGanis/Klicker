@@ -9,6 +9,8 @@ namespace Game.ClickButton
         [SerializeField] private Button _button;
         [SerializeField] private Image _image;
 
+        [SerializeField] private ParticleSystemWrapper _particleSystem;
+
         [SerializeField] private Vector2 posX;
         [SerializeField] private Vector2 posY;
 
@@ -38,6 +40,7 @@ namespace Game.ClickButton
 
             Vector2 pos = new Vector2(randX, randY);
             transform.localPosition = pos;
+            _particleSystem.PlayAtPosition(pos);
         }
         public void OffButton()
         {

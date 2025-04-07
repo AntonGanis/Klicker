@@ -1,3 +1,7 @@
+using System.Collections.Generic;
+using System.ComponentModel;
+using Game.Configs.EnemyConfigs;
+using Game.Configs.LevelConfigs;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -8,44 +12,75 @@ namespace Game.Enemies
         [SerializeField] private Transform _enemyContainer;
         [SerializeField] private EnemiesConfig _enemiesConfig;
 
-        private EnemyData _currentEnemyData;
-        private Enemy _currentEnemy;
+        private Enemy _currentEnemyMonoBehaviour;
         private HealthBar.HealthBar _healthBar;
+        private Timer.Timer _timer;
+        private LevelData _levelData;
+        private int _currentEnemyIndex;
 
-        public event UnityAction OnLevelPassed;
+        public event UnityAction<bool> OnLevelPassed;
 
-        public void Initialize(HealthBar.HealthBar healthBar)
+        private Transform container;
+        public void Initialize(HealthBar.HealthBar healthBar, Timer.Timer timer, Transform container)
         {
+            _timer = timer;
             _healthBar = healthBar;
+            this.container = container;
         }
 
-        public void SpawnEnemy()
+        public void StartLevel(LevelData levelData)
         {
-            _currentEnemyData = _enemiesConfig.Enemies[0];
+            _levelData = levelData;
+            _currentEnemyIndex = -1;
 
-            InitHpBar();
-
-            if (_currentEnemy == null)
+            if (_currentEnemyMonoBehaviour == null)
             {
-                _currentEnemy = Instantiate(_enemiesConfig.EnemyPrefab, _enemyContainer);
-                _currentEnemy.OnDead += () => OnLevelPassed?.Invoke();
-                _currentEnemy.OnDamaged += _healthBar.DecreaseValue;
-                _currentEnemy.OnDead += _healthBar.Hide;
+                _currentEnemyMonoBehaviour = Instantiate(_enemiesConfig.EnemyPrefab, _enemyContainer);
+                _currentEnemyMonoBehaviour.OnDead += SpawnEnemy;
+                _currentEnemyMonoBehaviour.OnDamaged += _healthBar.DecreaseValue;
             }
 
-            _currentEnemy.Initialize(_currentEnemyData);
+            SpawnEnemy();
         }
 
-        private void InitHpBar()
+        private void SpawnEnemy()
+        {
+            _currentEnemyIndex++;
+            _timer.Stop();
+
+            if (_currentEnemyIndex >= _levelData.Enemies.Count)
+            {
+                OnLevelPassed?.Invoke(true);
+                _timer.Stop();
+                return;
+            }
+
+            var currentEnemy = _levelData.Enemies[_currentEnemyIndex];
+
+            _timer.SetActive(currentEnemy.IsBoss);
+            if (currentEnemy.IsBoss)
+            {
+                _timer.SetValue(currentEnemy.BossTime);
+                _timer.OnTimerEnd += () => OnLevelPassed?.Invoke(false);
+            }
+            var currentEnemyViewData = _enemiesConfig.GetEnemy(currentEnemy.Id);
+            InitHpBar(currentEnemy.Hp, currentEnemyViewData.Name);
+            Transform prefab = Instantiate(currentEnemyViewData.Prefab);
+            _currentEnemyMonoBehaviour.Initialize(currentEnemy.Hp, prefab, 
+                currentEnemyViewData.Position, currentEnemyViewData.Scale, 
+                currentEnemyViewData.PrefabBlood, container);
+        }
+
+        private void InitHpBar(float health, string name)
         {
             _healthBar.Show();
-            _healthBar.SetMaxValue(_currentEnemyData.Health);
-
+            _healthBar.SetMaxValue(health);
+            _healthBar.SetName(name);
         }
 
         public void DamageCurrentEnemy(float damage)
         {
-            _currentEnemy.DoDamage(damage);
+            _currentEnemyMonoBehaviour.DoDamage(damage);
         }
     }
 }

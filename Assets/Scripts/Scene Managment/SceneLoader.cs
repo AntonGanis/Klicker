@@ -8,6 +8,10 @@ namespace SceneManagement
     {
         [SerializeField] private GameObject _loadingScreen;
 
+        public void Initialize()
+        {
+
+        }
         public void LoadMetaScene(SceneEnterParams enterParams = null)
         {
             StartCoroutine(LoadAndStartMeta(enterParams));

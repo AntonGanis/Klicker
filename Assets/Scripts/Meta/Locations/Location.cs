@@ -1,5 +1,5 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace Meta.Locations
@@ -8,25 +8,34 @@ namespace Meta.Locations
     {
         [SerializeField] private List<Pin> _pins;
 
-        public void Initialize(UnityAction<int> levelStartCallback)
+        public void Initialize(ProgressState locationState, int currentLevel, UnityAction<int> levelStartCallback)
         {
-            int currentLevel = 3;
-            for (int i = 0; i < _pins.Count; i++)
+            for (var i = 0; i < _pins.Count; i++)
             {
-                int level = i + 1;
-                var pinType = currentLevel > level
-                    ? PinType.Passed 
-                    :  currentLevel == level
-                       ? PinType.Current 
-                       : PinType.Close;
-                _pins[i].Initialize(level, pinType, ()=> levelStartCallback?.Invoke(level));
+                var level = i + 1;
+
+                var pinState = locationState switch
+                {
+                    ProgressState.Passed => ProgressState.Passed,
+                    ProgressState.Closed => ProgressState.Closed,
+                    _ => currentLevel > level ? ProgressState.Passed :
+                    currentLevel == level ? ProgressState.Current : ProgressState.Closed
+                };
+
+                if (pinState == ProgressState.Closed)
+                {
+                    _pins[i].Initialize(level, pinState, null);
+                }
+                else
+                {
+                    _pins[i].Initialize(level, pinState, () => levelStartCallback?.Invoke(level));
+                }
             }
         }
+
         public void SetActive(bool isActive)
         {
             gameObject.SetActive(isActive);
         }
     }
 }
-
-

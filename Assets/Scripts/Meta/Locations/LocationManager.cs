@@ -1,5 +1,6 @@
-using UnityEngine;
 using System.Collections.Generic;
+using Global.SaveSystem.SavableObjects;
+using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
@@ -11,43 +12,49 @@ namespace Meta.Locations
         [SerializeField] private Button _nextButton;
 
         [SerializeField] private List<Location> _locations;
+
         private int _currentLocation;
 
-        public void Initialize(int currentLocation, UnityAction<Vector2Int> startLevelCallback)
+        public void Initialize(Progress progress, UnityAction<int, int> startLevelCallback)
         {
-            _currentLocation = currentLocation;
-            FirstUnitLocation(currentLocation, startLevelCallback);
-            InitializeButtons();
+            _currentLocation = progress.CurrentLocation;
+            InitLocations(progress, startLevelCallback);
+            InitializeMoveLocationButtons();
         }
 
-        private void InitializeButtons()
+        private void InitializeMoveLocationButtons()
         {
-            _previousButton.onClick.AddListener(ShowNextLocation);
             _previousButton.onClick.AddListener(ShowPreviousLocation);
+            _nextButton.onClick.AddListener(ShowNextLocation);
+
             if (_currentLocation == _locations.Count)
             {
                 _nextButton.gameObject.SetActive(false);
             }
+
             if (_currentLocation == 1)
             {
                 _previousButton.gameObject.SetActive(false);
             }
         }
+
         private void ShowNextLocation()
         {
             _locations[_currentLocation - 1].SetActive(false);
             _currentLocation++;
             _locations[_currentLocation - 1].SetActive(true);
-            
+
             if (_currentLocation == _locations.Count)
             {
                 _nextButton.gameObject.SetActive(false);
             }
-            if(_currentLocation == 2)
+
+            if (_currentLocation == 2)
             {
                 _previousButton.gameObject.SetActive(true);
             }
         }
+
         private void ShowPreviousLocation()
         {
             _locations[_currentLocation - 1].SetActive(false);
@@ -58,18 +65,30 @@ namespace Meta.Locations
             {
                 _nextButton.gameObject.SetActive(true);
             }
-            if (_currentLocation == 2)
+
+            if (_currentLocation == 1)
             {
                 _previousButton.gameObject.SetActive(false);
             }
         }
-        private void FirstUnitLocation(int currentLocation, UnityAction<Vector2Int> startLevelCallback)
+
+        private void InitLocations(Progress progress, UnityAction<int, int> startLevelCallback)
         {
-            for (int i = 0; i < _locations.Count; i++)
+            for (var i = 0; i < _locations.Count; i++)
             {
-                int locationNumber = i + 1;
-                _locations[i].Initialize(level => startLevelCallback?.Invoke(new(locationNumber, level)));
-                _locations[i].SetActive(currentLocation == locationNumber);
+                var locationNumber = i + 1;
+
+                var isLocationPassed = progress.CurrentLocation > locationNumber
+                    ? ProgressState.Passed
+                    : progress.CurrentLocation == locationNumber
+                        ? ProgressState.Current
+                        : ProgressState.Closed;
+
+                var currentLevel = progress.CurrentLevel;
+
+
+                _locations[i].Initialize(isLocationPassed, currentLevel, level => startLevelCallback?.Invoke(locationNumber, level));
+                _locations[i].SetActive(progress.CurrentLocation == locationNumber);
             }
         }
     }
